@@ -20,10 +20,14 @@ class TavilySearchClient:
 		}
 		# デフォルト値をparamsで上書き可能
 		payload = {
-			'query': query,
-			'browsing': browsing,
-			'num_results': num_results,
-			'language': language
+			"query": query,
+			"include_answer": "advanced",
+			"search_depth": "advanced",
+			"topic": "news",
+			"max_results": 10,
+			"time_range": "month",
+			"country": "japan",
+			"language": 'ja',
 		}
 		payload.update(params)
 		response = requests.post(self.base_url, json=payload, headers=headers)
@@ -61,7 +65,7 @@ class TavilySearchClient:
 if __name__ == "__main__":
 	client = TavilySearchClient()
 	print("--- browsing=True で要約 ---")
-	results = client.search("生成AIについて")
+	results = client.search("ジャズ")
 	print(results)
 	# import json
 	# data = json.loads(results)
