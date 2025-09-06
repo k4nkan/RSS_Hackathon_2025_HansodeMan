@@ -1,2 +1,4 @@
-#環境変数格納用ディレクトリ
+
+venv/
 .env
+firebase_key.json
