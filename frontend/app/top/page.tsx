@@ -4,6 +4,7 @@ import ResultCard from "../components/ResultCard";
 import Link from "next/link";
 import { fetchDummyData } from "../components/fetchDummyData";
 import { fetchHomeData } from "../components/fetchHomeData";
+import LoadingSpinner from "../components/LoadingSpinner"; // 1. インポート
 
 type SearchResult = {
   id: string;
@@ -34,9 +35,10 @@ const HomePage = () => {
     load();
   }, []);
 
+  // 2. ローディング部分をコンポーネントに置き換え
   return loading ? (
     <div className="flex w-full h-[100vh] justify-center items-center">
-      <div className="text-2xl font-bold">Now Loading...</div>
+      <LoadingSpinner />
     </div>
   ) : (
     <div className="container mx-auto p-4 mb-10">
