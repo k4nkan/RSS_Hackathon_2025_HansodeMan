@@ -1,23 +1,22 @@
 import Link from "next/link";
-import Image from "next/image"; // Imageコンポーネントをインポート
+import Image from "next/image";
 
 export default function WelcomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50">
       <div className="text-center">
-        {/* ロゴ部分をImageコンポーネントに差し替え */}
         <div className="mb-12">
           <Image
             src="/logo.png"
             alt="app-logo"
             width={64}
             height={64}
-            className="mx-auto" // 中央寄せのため
+            className="mx-auto"
+            priority
           />
           <h2 className="font-bold text-2xl text-blue-800">News2talk</h2>
         </div>
 
-        {/* サインアップ・ログインボタン */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"

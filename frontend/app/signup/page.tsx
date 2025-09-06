@@ -2,34 +2,63 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react"; // [変更点] useStateをインポート
+import { useState } from "react";
+import { signup } from "../components/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
 
-  // [変更点] 3つの入力値を管理するStateを追加
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/hobby");
+
+    if (password !== passwordCheck) {
+      setError("パスワードが一致しません");
+      return;
+    }
+
+    setLoading(true);
+    const success = await signup(userId, password);
+    setLoading(false);
+
+    if (success) {
+      router.push("/hobby");
+    } else {
+      setError("サインアップに失敗しました");
+    }
   };
 
-  // [変更点] ボタンが有効かどうかの判定ロジック
-  // 全ての入力欄が空でなく、かつパスワードが一致しているか
   const isButtonEnabled =
     userId.trim() !== "" &&
     password.trim() !== "" &&
     password === passwordCheck;
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-white">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen items-center justify-center bg-white">
       <div className="w-[16rem]">
         <div className="flex w-full gap-[0.5rem] justify-center items-center mb-[2rem] pr-[1rem]">
           <div className="w-[4rem] h-[4rem]">
-            <Image src="/logo.png" alt="app-logo" width={64} height={64} />
+            <Image
+              src="/logo.png"
+              alt="app-logo"
+              width={64}
+              height={64}
+              priority
+            />
           </div>
           <h2 className="font-bold text-3xl text-blue-800">News2talk</h2>
         </div>
@@ -47,8 +76,8 @@ export default function LoginPage() {
               id="userId"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="ユーザーIDを入力"
-              value={userId} // [変更点]
-              onChange={(e) => setUserId(e.target.value)} // [変更点]
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
             />
           </div>
 
@@ -64,8 +93,8 @@ export default function LoginPage() {
               id="password"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="パスワードを入力"
-              value={password} // [変更点]
-              onChange={(e) => setPassword(e.target.value)} // [変更点]
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -81,14 +110,15 @@ export default function LoginPage() {
               id="passwordCheck"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="パスワードを再入力"
-              value={passwordCheck} // [変更点]
-              onChange={(e) => setPasswordCheck(e.target.value)} // [変更点]
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
             />
           </div>
 
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
           <button
             type="submit"
-            // [変更点] classNameとdisabledを動的に変更
             className={`w-full rounded-lg py-2 text-white font-semibold transition-colors
               ${
                 isButtonEnabled
@@ -98,7 +128,7 @@ export default function LoginPage() {
             `}
             disabled={!isButtonEnabled}
           >
-            ログイン
+            サインアップ
           </button>
         </form>
       </div>

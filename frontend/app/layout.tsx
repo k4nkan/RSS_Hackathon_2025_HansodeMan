@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import FooterNav from "./components/footerNav";
 import { ConditionalFooter } from "./components/ConditionalLayout";
 
 export const metadata: Metadata = {
