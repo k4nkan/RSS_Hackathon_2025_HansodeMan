@@ -49,7 +49,7 @@ class TavilySearchClient:
 		return json.dumps({"results": results}, ensure_ascii=False, indent=2)
 
 
-
+"""
 # Flaskハンドラー例
 # from flask import Flask, request, jsonify
 # app = Flask(__name__)
@@ -74,3 +74,4 @@ if __name__ == "__main__":
 	# data = json.loads(results)
 	# for item in data["results"]:
 	# 	print(item)
+	"""

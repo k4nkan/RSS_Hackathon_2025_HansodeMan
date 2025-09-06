@@ -107,3 +107,35 @@ class DBAccess:
         except Exception as e:
             logger.error(f"ユーザーデータ取得エラー: {str(e)}")
             return None
+        
+    @staticmethod
+    def get_main_hobby(user_id):
+        """
+        指定されたユーザーIDのMainHobbyを取得する
+        :param user_id: ユーザーID
+        :return: MainHobbyの値、存在しない場合はNone
+        """
+        try:
+            logger.info(f"MainHobby取得試行: user_id={user_id}")
+            
+            # 指定されたユーザーIDのデータを直接取得
+            ref = db.reference(f'users/{user_id}')
+            user_data = ref.get()
+            
+            if not user_data:
+                logger.warning(f"ユーザーID {user_id} が見つかりません")
+                return None
+            
+            # MainHobbyフィールドを取得
+            main_hobby = user_data.get('MainHobby')
+            
+            if main_hobby is not None:
+                logger.info(f"MainHobby取得成功: user_id={user_id}, MainHobby={main_hobby}")
+                return main_hobby
+            else:
+                logger.warning(f"MainHobbyが設定されていません: user_id={user_id}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"MainHobby取得中にエラー: user_id={user_id}, error={str(e)}")
+            return None
