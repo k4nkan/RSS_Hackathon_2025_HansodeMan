@@ -21,7 +21,7 @@ def create_app():
     logging.info("Flask app created.")
 
     logging.info("Configuring CORS...")
-    CORS(app)
+    CORS(app, origins=["http://localhost:3000", "https://your-frontend.com"])
     logging.info("CORS configured.")
 
     try:
