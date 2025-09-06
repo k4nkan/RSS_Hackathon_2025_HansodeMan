@@ -21,7 +21,7 @@ def create_app():
     logging.info("Flask app created.")
 
     logging.info("Configuring CORS...")
-    CORS(app, origins=["https://news2talk.vercel.app"])
+    CORS(app)
     logging.info("CORS configured.")
 
     try:
