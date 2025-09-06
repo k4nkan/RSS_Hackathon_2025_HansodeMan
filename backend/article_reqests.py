@@ -65,7 +65,7 @@ class TavilySearchClient:
 if __name__ == "__main__":
 	client = TavilySearchClient()
 	print("--- browsing=True で要約 ---")
-	results = client.search("ジャズ")
+	results = client.search("野球")
 	print(results)
 	# import json
 	# data = json.loads(results)
