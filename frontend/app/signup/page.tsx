@@ -8,7 +8,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/");
+    router.push("/hobby");
   };
 
   return (
