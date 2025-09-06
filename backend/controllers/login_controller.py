@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from models.realtimeDB_access import UserDB
+from models.realtimeDB_access import DBAccess
 
 def login():
     data = request.get_json()
@@ -9,18 +9,13 @@ def login():
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
 
-    users = UserDB.get_all()
-    if not users:
+    auth_result = DBAccess.authenticate_user(username, password)
+
+    if auth_result:
+        return jsonify({
+            "message": "Login successful",
+            "user_id": auth_result.get("user_id"),
+            "username": auth_result.get("username")
+        }), 200
+    else:
         return jsonify({"error": "Invalid username or password"}), 401
-
-    for user_id, user_data in users.items():
-        # データベースにuser_dataが存在し、かつuserとpassキーが存在するかチェック
-        if user_data and 'user' in user_data and 'pass' in user_data:
-            if user_data['user'] == username and user_data['pass'] == password:
-                return jsonify({
-                    "message": "Login successful",
-                    "user_id": user_id,
-                    "username": user_data.get('user')
-                }), 200
-
-    return jsonify({"error": "Invalid username or password"}), 401

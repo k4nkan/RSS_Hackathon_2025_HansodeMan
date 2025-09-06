@@ -19,5 +19,4 @@ __pycache__/
 /setup.cfg
 venv/
 README.md
-firebase_key.json
 .env
