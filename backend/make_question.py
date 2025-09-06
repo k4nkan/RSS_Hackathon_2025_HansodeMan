@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
-
+from json import dumps as json_dumps
 
 # Geminiクライアント（google.generativeai使用）
 
@@ -27,12 +27,12 @@ class GeminiClient:
 			'・できるだけ記事に即した質問を生成してください\n'
 			'・質問は5つ程度生成してください\n'
 			'・<target>で囲う属性の相手に質問することを想定し，年代・口調・付随するトピックを組み込めるよう考慮してください\n'
-			'・考慮すバックグラウンド等は出力せず，出力するのは質問内容のみにしてください。\n'
+			'・考慮するバックグラウンド等は出力せず，出力するのは質問内容のみにしてください。\n'
 			f'<userinput>{summary}</userinput>'
 			f'<target>年齢:{age}, 関係性:{relationship}</target>'
 		)
 		response = self.model.generate_content(prompt)
-		return response.text
+		return json_dumps({"questions": response.text}, ensure_ascii=False, indent=2)
 
 
 # ローカルテスト用

@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+from json import dumps as json_dumps
 
 
 # Geminiクライアント（google.generativeai使用）
@@ -28,7 +29,7 @@ class GeminiClient:
 			f'<userinput>{context}</userinput>'
 		)
 		response = self.model.generate_content(prompt)
-		return response.text
+		return json_dumps({"summary": response.text}, ensure_ascii=False, indent=2)
 
 
 # ローカルテスト用
