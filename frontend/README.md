@@ -1,2 +1,3 @@
 # RSS_Hackathon_2025_HansodeMan_Frontend
+
 Folder for RSS_Hackathon_2025 frontend.
