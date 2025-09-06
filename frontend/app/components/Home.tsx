@@ -32,24 +32,29 @@ const HomeComponent = () => {
   const fetchHomeData = async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await fetch("/home", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://rss-hack-hansodeman-471307.an.r.appspot.com/users/home",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data: HomeResponse = await response.json();
+      console.log("Received JSON data:", data); // Add this line
       setHomeData(data);
     } catch (err) {
       setError({
         message: err instanceof Error ? err.message : "Unknown error occurred",
         status: err instanceof Response ? err.status : undefined,
       });
+      console.error("Fetch error:", err); // Add this line to log the full error
     } finally {
       setLoading(false);
     }
