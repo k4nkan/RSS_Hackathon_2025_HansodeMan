@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Footer from "./footerNav";
 
 // フッターを非表示にしたいページのパスを配列で定義
-const pathsToHideFooter = ["/login", "/signup", "/hobby", "/"]; // 趣味選択ページのパスを追記してください
+const pathsToHideFooter = ["/login", "/signup", "/hobby", "/", "/profile/edit"]; // 趣味選択ページのパスを追記してください
 
 export const ConditionalFooter = () => {
   const pathname = usePathname();
