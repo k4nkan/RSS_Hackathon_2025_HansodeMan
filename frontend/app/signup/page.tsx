@@ -4,14 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signup } from "../components/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
 
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,9 @@ export default function LoginPage() {
       return;
     }
 
+    setLoading(true);
     const success = await signup(userId, password);
+    setLoading(false);
 
     if (success) {
       router.push("/hobby");
@@ -34,6 +38,14 @@ export default function LoginPage() {
     userId.trim() !== "" &&
     password.trim() !== "" &&
     password === passwordCheck;
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-white">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen items-center justify-center bg-white">

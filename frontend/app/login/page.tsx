@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { login } from "../components/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,11 +12,15 @@ export default function LoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const success = await login(userId, password);
+
+    setLoading(false);
 
     if (success) {
       router.push("/top");
@@ -27,7 +32,7 @@ export default function LoginPage() {
   const isButtonEnabled = userId.trim() !== "" && password.trim() !== "";
 
   return (
-    <div className="flex h-screen items-center justify-center bg-white">
+    <div className="relative flex h-screen items-center justify-center bg-white">
       <div className="w-[16rem]">
         <div className="flex w-full gap-[0.5rem] justify-center items-center mb-[2rem] pr-[1rem]">
           <div className="w-[4rem] h-[4rem]">
@@ -88,12 +93,18 @@ export default function LoginPage() {
                   : "bg-gray-400 cursor-not-allowed"
               }
             `}
-            disabled={!isButtonEnabled}
+            disabled={!isButtonEnabled || loading}
           >
             ログイン
           </button>
         </form>
       </div>
+
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 }
