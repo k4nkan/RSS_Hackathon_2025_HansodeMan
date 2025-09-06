@@ -5,7 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 
 import Link from "next/link";
 
-const Footer = () => {
+const FooterNav = () => {
   const navItems = [
     { name: "home", icon: IoHomeOutline, href: "/" },
     { name: "create", icon: FiPlusSquare, href: "/create" },
@@ -41,4 +41,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default FooterNav;
