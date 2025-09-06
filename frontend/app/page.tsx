@@ -1,30 +1,47 @@
-// app/page.jsx (HomePage.jsx)
-
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import ResultCard from "./components/ResultCard";
 import Link from "next/link";
+import { fetchDummyData } from "./components/fetchDummyData";
 
-import data from "./data.json";
+type SearchResult = {
+  id: string;
+  url: string;
+  title: string;
+  content: string;
+  score: number;
+  raw_content: string | null;
+};
 
 const HomePage = () => {
-  const searchResults = data.results;
+  const [loading, setLoading] = useState(true);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
-  return (
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetchDummyData();
+        setSearchResults(res.results);
+      } catch (err) {
+        console.error("❌ fetchDummyData error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  return loading ? (
+    <div className="flex w-full h-[100vh] justify-center items-center">
+      <div className="text-2xl font-bold">Now Loading...</div>
+    </div>
+  ) : (
     <div className="container mx-auto p-4 mb-10">
-      <h1 className="text-2xl font-bold mb-6">あなたへのおすすめ</h1>
+      <h2 className="text-xl font-semibold mb-4 mt-10">あなたへのおすすめ</h2>
       {searchResults.length > 0 ? (
-        searchResults.map((result, index) => (
-          <Link
-            key={index}
-            // `href`にテンプレートリテラルを使ってidを組み込む
-            href={`/detail/${result.id}`}
-            passHref
-          >
-            <ResultCard
-              title={result.title}
-              url={result.url}
-              content={result.content}
-            />
+        searchResults.map((result) => (
+          <Link key={result.id} href={`/detail/${result.id}`} passHref>
+            <ResultCard title={result.title} />
           </Link>
         ))
       ) : (
