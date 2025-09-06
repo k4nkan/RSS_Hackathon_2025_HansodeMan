@@ -1,6 +1,7 @@
-from models.user_model import get_user, create_user, get_all_users
+from models.realtimeDB_access import UserDB
 
 def add_user(data):
-    return create_user(data)
+    new_user_id = UserDB.add(data)
+    return new_user_id
 
 
