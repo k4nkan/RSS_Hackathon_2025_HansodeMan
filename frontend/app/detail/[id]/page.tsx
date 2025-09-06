@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link"; // Linkコンポーネントをインポート
+import Link from "next/link";
 import { fetchDummyData } from "../../components/fetchDummyData";
 
 interface Article {
@@ -68,7 +68,6 @@ const DetailPage = ({ params }: DetailPageProps) => {
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">{article.title}</h1>
 
-      {/* --- [変更点] リンクとボタンを横並びに配置 --- */}
       <div className="flex items-center gap-6 mb-8">
         <a
           href={article.url}
@@ -78,13 +77,13 @@ const DetailPage = ({ params }: DetailPageProps) => {
         >
           元の記事を読む
         </a>
-        <div>
-          <Link href="/" legacyBehavior>
-            <a className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm">
-              一覧に戻る
-            </a>
-          </Link>
-        </div>
+        {/* [変更点] legacyBehaviorと<a>タグを削除し、classNameをLinkに直接指定 */}
+        <Link
+          href="/"
+          className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+        >
+          一覧に戻る
+        </Link>
       </div>
 
       <div className="mb-10 p-6 bg-gray-50 rounded-lg shadow">
@@ -134,7 +133,7 @@ const DetailPage = ({ params }: DetailPageProps) => {
             <select
               id="relationship-select"
               value={partnerRelationship}
-              onChange={(e) => setPartnerRelationship(e.tabular.value)}
+              onChange={(e) => setPartnerRelationship(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             >
               <option>友人</option>
