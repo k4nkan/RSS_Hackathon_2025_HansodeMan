@@ -1,0 +1,2 @@
+# RSS_Hackathon_2025_HansodeMan_Backend
+Folder for RSS_Hackathon_2025 backend.
