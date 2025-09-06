@@ -77,7 +77,7 @@ const DetailPage = ({ params }: DetailPageProps) => {
           元の記事を読む
         </a>
         <Link
-          href="/"
+          href="/top"
           className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm"
         >
           一覧に戻る
