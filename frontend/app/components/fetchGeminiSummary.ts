@@ -16,7 +16,7 @@ export const fetchGeminiSummary = async (context: string) => {
     }
 
     const data = await response.json();
-    console.log("✅ Home API response:", data);
+    console.log("✅ Gemini API response:", data);
     return data;
   } catch (err) {
     console.error("❌ Fetch error:", err);
