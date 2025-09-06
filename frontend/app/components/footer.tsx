@@ -1,7 +1,7 @@
 import React from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { FiPlusSquare } from "react-icons/fi";
-import { GoHistory } from "react-icons/go";
+import { FaRegUser } from "react-icons/fa";
 
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ const FooterNav = () => {
   const navItems = [
     { name: "home", icon: IoHomeOutline, href: "/" },
     { name: "create", icon: FiPlusSquare, href: "/create" },
-    { name: "list", icon: GoHistory, href: "/list" },
+    { name: "profile", icon: FaRegUser, href: "/profile" },
   ];
 
   return (
