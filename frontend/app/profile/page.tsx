@@ -39,9 +39,12 @@ const ProfilePage = () => {
           >
             プロフィールを編集
           </Link>
-          <button className="w-full py-2 px-4 bg-red-500 rounded-lg text-white font-semibold hover:bg-red-600 transition-colors">
+          <Link
+            href="/"
+            className="w-full py-2 px-4 bg-red-500 rounded-lg text-white font-semibold hover:bg-red-600 transition-colors text-center"
+          >
             ログアウト
-          </button>
+          </Link>
         </div>
       </div>
     </div>

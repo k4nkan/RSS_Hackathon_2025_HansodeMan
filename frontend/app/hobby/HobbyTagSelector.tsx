@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-// OnChangeValue は使わなくなったので型インポートから削除してもOKです
-// import type { OnChangeValue } from "react-select";
 
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
@@ -27,6 +25,9 @@ export default function HobbyTagSelector({
 
   const [selectedHobbies, setSelectedHobbies] = useState<HobbyOption[]>([]);
 
+  // [変更点] メインの趣味が選択されているかどうかの判定フラグ
+  const isSubHobbyDisabled = selectedMainHobby === null;
+
   const handlePopularTagClick = (tag: string) => {
     const isAlreadySelected = selectedHobbies.some(
       (hobby) => hobby.value === tag
@@ -41,9 +42,7 @@ export default function HobbyTagSelector({
     }
   };
 
-  // [変更点] ここを修正してTypeScriptエラーを解消
   const handleMultiSelectChange = (newValue: unknown) => {
-    // onChangeから渡される値(newValue)の型を、HobbyOptionの配列であると明示する
     setSelectedHobbies(newValue as HobbyOption[]);
   };
 
@@ -64,26 +63,36 @@ export default function HobbyTagSelector({
           value={selectedMainHobby}
           onChange={(selected) => setSelectedMainHobby(selected as HobbyOption)}
           isClearable
-          placeholder="検索して一つ選択"
+          placeholder="まずメインの趣味を選択してください"
         />
       </div>
 
       <div className="mb-3">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label
+          className={`block text-sm font-semibold mb-2 ${
+            isSubHobbyDisabled ? "text-gray-400" : "text-gray-700"
+          }`}
+        >
           複数の趣味
         </label>
         <Select
           instanceId="multi-hobby-selector"
           options={options}
           value={selectedHobbies}
-          onChange={handleMultiSelectChange} // 修正した関数を渡す
+          onChange={handleMultiSelectChange}
           isMulti
-          placeholder="検索して複数選択"
+          placeholder="メインの趣味を選択すると選べます"
+          isDisabled={isSubHobbyDisabled}
         />
       </div>
 
       <div className="mb-8">
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">
+        <h3
+          className={`text-sm font-semibold mb-2 ${
+            isSubHobbyDisabled ? "text-gray-400" : "text-gray-700"
+          }`}
+        >
+          人気の趣味
         </h3>
         <div className="flex flex-wrap gap-2">
           {popularHobbies.map((tag) => (
@@ -91,10 +100,13 @@ export default function HobbyTagSelector({
               key={tag}
               type="button"
               onClick={() => handlePopularTagClick(tag)}
+              disabled={isSubHobbyDisabled}
               className={`
                 px-4 py-2 rounded-full text-sm font-medium transition-colors border
                 ${
-                  selectedHobbies.some((hobby) => hobby.value === tag)
+                  isSubHobbyDisabled
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : selectedHobbies.some((hobby) => hobby.value === tag)
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                 }

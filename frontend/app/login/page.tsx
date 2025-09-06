@@ -2,14 +2,22 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react"; // [変更点] useStateをインポート
 
 export default function LoginPage() {
   const router = useRouter();
+
+  // [変更点] 入力値を管理するStateを追加
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     router.push("/top");
   };
+
+  // [変更点] ボタンが有効かどうかの判定ロジック
+  const isButtonEnabled = userId.trim() !== "" && password.trim() !== "";
 
   return (
     <div className="flex h-screen items-center justify-center bg-white">
@@ -34,6 +42,8 @@ export default function LoginPage() {
               id="userId"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="ユーザーIDを入力"
+              value={userId} // [変更点] valueを追加
+              onChange={(e) => setUserId(e.target.value)} // [変更点] onChangeを追加
             />
           </div>
 
@@ -49,12 +59,22 @@ export default function LoginPage() {
               id="password"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="パスワードを入力"
+              value={password} // [変更点] valueを追加
+              onChange={(e) => setPassword(e.target.value)} // [変更点] onChangeを追加
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 py-2 text-white font-semibold hover:bg-blue-700 transition-colors"
+            // [変更点] isButtonEnabledに応じてclassNameとdisabledを動的に変更
+            className={`w-full rounded-lg py-2 text-white font-semibold transition-colors
+              ${
+                isButtonEnabled
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }
+            `}
+            disabled={!isButtonEnabled}
           >
             ログイン
           </button>

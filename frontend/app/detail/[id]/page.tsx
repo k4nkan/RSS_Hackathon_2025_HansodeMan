@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchDummyData } from "../../components/fetchDummyData";
 import { fetchGeminiSummary } from "@/app/components/fetchGeminiSummary";
+// [変更点 1] 作成したローディングスピナーをインポート
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface Article {
   id: string;
@@ -20,7 +22,10 @@ const DetailPage = ({ params }: DetailPageProps) => {
 
   const [article, setArticle] = useState<Article>();
   const [loading, setLoading] = useState(true);
-  const [summary, setSummary] = useState("now loading");
+
+  // [変更点 2] Stateを修正
+  const [summary, setSummary] = useState("");
+  const [isSummaryLoading, setIsSummaryLoading] = useState(true);
 
   const [partnerAge, setPartnerAge] = useState("20代");
   const [partnerRelationship, setPartnerRelationship] = useState("友人");
@@ -34,10 +39,21 @@ const DetailPage = ({ params }: DetailPageProps) => {
         if (foundArticle) {
           setArticle(foundArticle);
 
-          const summaryResult = await fetchGeminiSummary(foundArticle.content);
-          if (summaryResult) {
-            setSummary(summaryResult.summary ?? "要約できませんでした");
-          }
+          // [変更点 3] 要約取得処理を修正
+          setIsSummaryLoading(true);
+          // try {
+          //   const summaryResult = await fetchGeminiSummary(
+          //     foundArticle.content
+          //   );
+          //   setSummary(
+          //     summaryResult?.summary ?? "要約を生成できませんでした。"
+          //   );
+          // } catch (summaryError) {
+          //   console.error("Failed to fetch summary:", summaryError);
+          //   setSummary("要約の取得中にエラーが発生しました。");
+          // } finally {
+          //   setIsSummaryLoading(false);
+          // }
         }
       } catch (error) {
         console.error("Failed to fetch article:", error);
@@ -77,7 +93,7 @@ const DetailPage = ({ params }: DetailPageProps) => {
           元の記事を読む
         </a>
         <Link
-          href="/"
+          href="/top"
           className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm"
         >
           一覧に戻る
@@ -88,9 +104,15 @@ const DetailPage = ({ params }: DetailPageProps) => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-3">
           この記事の要約
         </h2>
-        <p className="text-gray-700 leading-relaxed">{summary}</p>
+        {/* [変更点 4] UIを条件分岐で切り替え */}
+        {isSummaryLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <p className="text-gray-700 leading-relaxed">{summary}</p>
+        )}
       </div>
 
+      {/* ...以降のJSXは変更なし... */}
       <div className="mb-10 p-6 bg-white rounded-lg border border-gray-200">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           質問を作成する
