@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from controllers.entry import add_user
 from controllers.login_controller import login
+from controllers.detail_controller import handle_detail
 
 user_bp = Blueprint("user", __name__, url_prefix="/users")
 
@@ -13,3 +14,11 @@ def create_user():
 @user_bp.route("/login", methods=["POST"])
 def login_route():
     return login()
+
+@user_bp.route("/detail", methods=["POST"])
+def detail_route():
+    processed_result = handle_detail()
+    return jsonify({
+        "message": "Detail processed successfully",
+        "result": processed_result
+    }), 200
