@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchDummyData } from "../../components/fetchDummyData";
+import { fetchGeminiSummary } from "@/app/components/fetchGeminiSummary";
 
 interface Article {
   id: string;
@@ -17,12 +18,9 @@ interface DetailPageProps {
 const DetailPage = ({ params }: DetailPageProps) => {
   const { id } = React.use(params);
 
-  const [article, setArticle] = useState<Article | null>(null);
+  const [article, setArticle] = useState<Article>();
   const [loading, setLoading] = useState(true);
-
-  const [summary, setSummary] = useState(
-    "この記事は、非同期処理とデータフェッチングの重要性について解説しています。特にReact Server Componentsでのデータの扱い方に焦点を当てています。"
-  );
+  const [summary, setSummary] = useState("now loading");
 
   const [partnerAge, setPartnerAge] = useState("20代");
   const [partnerRelationship, setPartnerRelationship] = useState("友人");
@@ -32,8 +30,14 @@ const DetailPage = ({ params }: DetailPageProps) => {
       try {
         const res = await fetchDummyData();
         const foundArticle = res.results.find((item) => item.id === id);
+
         if (foundArticle) {
           setArticle(foundArticle);
+
+          const summaryResult = await fetchGeminiSummary(foundArticle.content);
+          if (summaryResult) {
+            setSummary(summaryResult.summary ?? "要約できませんでした");
+          }
         }
       } catch (error) {
         console.error("Failed to fetch article:", error);
@@ -47,7 +51,7 @@ const DetailPage = ({ params }: DetailPageProps) => {
 
   const handleCreateQuestion = () => {
     console.log("バックエンドに送信するデータ:", {
-      summary: summary,
+      summary,
       attributes: {
         age: partnerAge,
         relationship: partnerRelationship,
@@ -56,13 +60,8 @@ const DetailPage = ({ params }: DetailPageProps) => {
     alert("質問を作成します（コンソールを確認してください）");
   };
 
-  if (loading) {
-    return <div>読み込み中...</div>;
-  }
-
-  if (!article) {
-    return <div>記事が見つかりませんでした。</div>;
-  }
+  if (loading) return <div>読み込み中...</div>;
+  if (!article) return <div>記事が見つかりませんでした。</div>;
 
   return (
     <div className="container mx-auto p-8 mb-8">
@@ -77,7 +76,6 @@ const DetailPage = ({ params }: DetailPageProps) => {
         >
           元の記事を読む
         </a>
-        {/* [変更点] legacyBehaviorと<a>タグを削除し、classNameをLinkに直接指定 */}
         <Link
           href="/"
           className="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm"
