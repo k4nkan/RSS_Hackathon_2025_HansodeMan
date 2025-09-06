@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from models.realtimeDB_access import DBAccess
+from controllers.home_controller import home
 
 def login():
     data = request.get_json()
@@ -12,10 +13,6 @@ def login():
     auth_result = DBAccess.authenticate_user(username, password)
 
     if auth_result:
-        return jsonify({
-            "message": "Login successful",
-            "user_id": auth_result.get("user_id"),
-            "username": auth_result.get("username")
-        }), 200
+        return home(username)
     else:
         return jsonify({"error": "Invalid username or password"}), 401
