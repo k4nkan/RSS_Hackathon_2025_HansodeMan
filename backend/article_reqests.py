@@ -1,6 +1,8 @@
 import os
 import requests
 from dotenv import load_dotenv
+import json
+
 
 class TavilySearchClient:
 	def __init__(self):
@@ -27,14 +29,18 @@ class TavilySearchClient:
 		response = requests.post(self.base_url, json=payload, headers=headers)
 		response.raise_for_status()
 		data = response.json()
-		# 必要な項目のみ抽出
 		results = []
+		id = 1
+		import re
 		for item in data.get('results', []):
 			title = item.get('title')
 			url = item.get('url')
-			content = item.get('content')
-			results.append({'title': title, 'url': url, 'content': content})
-		return results
+			content = item.get('content', '')
+			# 改行・連続空白を1つのスペースにまとめる
+			content = re.sub(r'[\s\u3000]+', ' ', content).strip()
+			results.append({'id': str(id), 'title': title, 'url': url, 'content': content})
+			id += 1
+		return json.dumps({"results": results}, ensure_ascii=False, indent=2)
 
 
 
@@ -55,6 +61,9 @@ class TavilySearchClient:
 if __name__ == "__main__":
 	client = TavilySearchClient()
 	print("--- browsing=True で要約 ---")
-	results = client.search("OpenAI GPT-5 評判")
-	for item in results:
-		print(item)
+	results = client.search("生成AIについて")
+	print(results)
+	# import json
+	# data = json.loads(results)
+	# for item in data["results"]:
+	# 	print(item)
