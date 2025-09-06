@@ -13,7 +13,9 @@ class TavilySearchClient:
 			raise ValueError('TAVILY_API_KEYが設定されていません')
 		self.base_url = 'https://api.tavily.com/search'
 
-	def search(self, query, browsing=True, num_results=5, language='ja', **params):
+	def search(self, json_data, browsing=True, num_results=5, language='ja', **params):
+		# json_dataはdict型を想定
+		query = json_data.get('query', '')
 		headers = {
 			'Authorization': f'Bearer {self.api_key}',
 			'Content-Type': 'application/json',
@@ -65,7 +67,8 @@ class TavilySearchClient:
 if __name__ == "__main__":
 	client = TavilySearchClient()
 	print("--- browsing=True で要約 ---")
-	results = client.search("野球")
+	json_data = {"query": "野球"}
+	results = client.search(json_data)
 	print(results)
 	# import json
 	# data = json.loads(results)
