@@ -1,2 +1,5 @@
 runtime: python311
 entrypoint: gunicorn --bind :$PORT app:app
+
+env_variables:
+  TAVILY_API_KEY: "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"

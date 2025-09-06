@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 class TavilySearchClient:
 	def __init__(self):
 		# .envファイルからAPIキーを取得
-		load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env', '.env'))
+		        load_dotenv()
 		self.api_key = os.environ.get('TAVILY_API_KEY')
 		if not self.api_key:
 			raise ValueError('TAVILY_API_KEYが設定されていません')
