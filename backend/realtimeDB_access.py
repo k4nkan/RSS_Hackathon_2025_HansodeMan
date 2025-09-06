@@ -23,20 +23,25 @@ class DBAccess:
                 'databaseURL': 'https://rss-hack-hansodeman-default-rtdb.firebaseio.com/'
             })
 
-    def write_sample(self):
+    def write_sample(self, userKey, data):
         # 書き込みたいデータ例
-        data = {
-            'PASS': 'TestPassword',
-            'MainHobby': 'プログラミング',
-            'SubHobby': ['ゲーム', '読書'],
-        }
+        # data = {
+        #     'PASS': 'TestPassword',
+        #     'MainHobby': 'プログラミング',
+        #     'SubHobby': ['ゲーム', '読書'],
+        # }
 
         # 書き込み先の参照
-        ref = db.reference('users/testuser1')
+        ref = db.reference(f'users/{userKey}')
         ref.set(data)
         print("データを書き込みました。")
 
 
 if __name__ == "__main__":
     db_access = DBAccess()
-    db_access.write_sample()
+    data = {
+        'PASS': 'TestPassword',
+        'MainHobby': 'プログラミング',
+        'SubHobby': ['ゲーム', '読書'],
+    }
+    db_access.write_sample('testuser1', data)
