@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
@@ -6,7 +7,7 @@ export default function LoginPage() {
       <div className="w-[16rem]">
         <div className="flex w-full gap-[0.5rem] justify-center items-center mb-[2rem] pr-[1rem]">
           <div className="w-[4rem] h-[4rem]">
-            <img src="logo.png" alt="app-logo" />
+            <Image src="logo.png" alt="app-logo" />
           </div>
           <h2 className="font-bold text-3xl text-blue-800">News2talk</h2>
         </div>
