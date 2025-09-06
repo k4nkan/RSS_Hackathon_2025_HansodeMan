@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Footer from "./components/footer";
+import FooterNav from "./components/footerNav";
 
 export const metadata: Metadata = {
   title: "News2talk",
@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <main>{children}</main>
-        <Footer />
+        <FooterNav />
       </body>
     </html>
   );

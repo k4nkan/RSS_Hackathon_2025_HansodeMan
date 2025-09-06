@@ -1,16 +1,15 @@
 import React from "react";
-import data from "../../data.json";
+import { fetchDummyData } from "../../components/fetchDummyData";
 
 interface DetailPageProps {
   params: { id: string };
 }
 
 const DetailPage = async ({ params }: DetailPageProps) => {
-  // await をつけて params を展開
-  const { id } = await params;
+  const { id } = params;
 
-  // JSONデータからIDに一致する記事を検索
-  const article = data.results.find((item) => item.id === id);
+  const res = await fetchDummyData();
+  const article = res.results.find((item) => item.id === id);
 
   if (!article) {
     return <div>記事が見つかりませんでした。</div>;
@@ -27,6 +26,7 @@ const DetailPage = async ({ params }: DetailPageProps) => {
       >
         元の記事を読む
       </a>
+      <p className="text-gray-700">{article.content}</p>
     </div>
   );
 };
