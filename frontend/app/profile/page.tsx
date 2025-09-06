@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const user = {
   name: "山田 太郎",
@@ -32,9 +33,12 @@ const ProfilePage = () => {
         </div>
 
         <div className="flex flex-col space-y-3">
-          <button className="w-full py-2 px-4 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
+          <Link
+            href="/profile/edit"
+            className="w-full py-2 px-4 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors text-center"
+          >
             プロフィールを編集
-          </button>
+          </Link>
           <button className="w-full py-2 px-4 bg-red-500 rounded-lg text-white font-semibold hover:bg-red-600 transition-colors">
             ログアウト
           </button>
