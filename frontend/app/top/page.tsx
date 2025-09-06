@@ -2,17 +2,14 @@
 import React, { useEffect, useState } from "react";
 import ResultCard from "../components/ResultCard";
 import Link from "next/link";
-import { fetchDummyData } from "../components/fetchDummyData";
 import { fetchHomeData } from "../components/fetchHomeData";
-import LoadingSpinner from "../components/LoadingSpinner"; // 1. インポート
+import LoadingSpinner from "../components/LoadingSpinner";
 
 type SearchResult = {
   id: string;
   url: string;
   title: string;
   content: string;
-  score: number;
-  raw_content: string | null;
 };
 
 const HomePage = () => {
@@ -22,12 +19,15 @@ const HomePage = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetchDummyData();
-        const profile = await fetchHomeData();
-        console.log(profile);
-        setSearchResults(res.results);
+        // [変更点] ダミーデータ取得を削除し、実際のAPIを呼び出す
+        // TODO: ログイン機能実装後、実際のユーザーIDを渡すように修正
+        const res = await fetchHomeData("testuser1");
+
+        if (res && res.results) {
+          setSearchResults(res.results);
+        }
       } catch (err) {
-        console.error("❌ fetchDummyData error:", err);
+        console.error("❌ fetchHomeData error:", err);
       } finally {
         setLoading(false);
       }
@@ -35,7 +35,6 @@ const HomePage = () => {
     load();
   }, []);
 
-  // 2. ローディング部分をコンポーネントに置き換え
   return loading ? (
     <div className="flex w-full h-[100vh] justify-center items-center">
       <LoadingSpinner />
