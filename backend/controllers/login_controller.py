@@ -1,10 +1,6 @@
 from flask import request, jsonify
 from models.realtimeDB_access import UserDB
 
-def add_user(data):
-    new_user_id = UserDB.add(data)
-    return new_user_id
-
 def login():
     data = request.get_json()
     username = data.get('user')
@@ -28,5 +24,3 @@ def login():
                 }), 200
 
     return jsonify({"error": "Invalid username or password"}), 401
-
-

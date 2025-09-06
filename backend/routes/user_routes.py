@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from controllers.user_controller import add_user, login
+from controllers.entry import add_user
+from controllers.login_controller import login
 
 user_bp = Blueprint("user", __name__, url_prefix="/users")
 
