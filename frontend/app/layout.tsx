@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import FooterNav from "./components/footerNav";
+import { ConditionalFooter } from "./components/ConditionalLayout";
 
 export const metadata: Metadata = {
   title: "News2talk",
@@ -19,7 +20,7 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <main>{children}</main>
-        <FooterNav />
+        <ConditionalFooter />
       </body>
     </html>
   );
