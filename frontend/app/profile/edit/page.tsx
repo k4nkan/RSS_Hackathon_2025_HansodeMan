@@ -4,12 +4,30 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// 既存のユーザーデータを仮定
 const initialUser = {
   name: "山田 太郎",
   mbti: "ENFP",
   interests: ["旅行", "映画", "料理", "テクノロジー"],
 };
+
+const mbtiTypes = [
+  "ISTJ",
+  "ISFJ",
+  "INFJ",
+  "INTJ",
+  "ISTP",
+  "ISFP",
+  "INFP",
+  "INTP",
+  "ESTP",
+  "ESFP",
+  "ENFP",
+  "ENTP",
+  "ESTJ",
+  "ESFJ",
+  "ENFJ",
+  "ENTJ",
+];
 
 const ProfileEditPage = () => {
   const router = useRouter();
@@ -18,11 +36,7 @@ const ProfileEditPage = () => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // ここで実際にデータを更新するAPIを呼び出す
-    console.log("Saving data:", {
-      name,
-      mbti,
-    });
+    console.log("Saving data:", { name, mbti });
     alert("プロフィールを更新しました！");
     router.push("/profile");
   };
@@ -60,21 +74,24 @@ const ProfileEditPage = () => {
           >
             MBTI
           </label>
-          <input
-            type="text"
+          <select
             id="mbti"
             value={mbti}
             onChange={(e) => setMbti(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            {mbtiTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* [変更点] 興味・関心の入力欄をボタンに変更 */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             興味・関心
           </label>
-          {/* 現在の興味・関心をタグで表示 */}
           <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-50 rounded-lg border">
             {initialUser.interests.map((interest, index) => (
               <span
@@ -85,7 +102,6 @@ const ProfileEditPage = () => {
               </span>
             ))}
           </div>
-          {/* /hobby ページへ移動するリンクをボタンとして表示 */}
           <Link
             href="/hobby"
             className="block w-full py-2 px-4 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors text-center"
