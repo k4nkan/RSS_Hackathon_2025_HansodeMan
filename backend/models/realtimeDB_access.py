@@ -40,3 +40,12 @@ class UserDB:
         new_user_ref = ref.push(user_data)
         print(f"データが新しいIDで書き込まれました: {new_user_ref.key}")
         return new_user_ref.key
+
+    @staticmethod
+    def get_all():
+        """
+        'users' パスからすべてのユーザーデータを取得する。
+        :return: すべてのユーザーデータ(dict)
+        """
+        ref = db.reference('users')
+        return ref.get()
