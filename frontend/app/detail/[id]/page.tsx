@@ -20,7 +20,10 @@ const DetailPage = ({ params }: DetailPageProps) => {
 
   const [article, setArticle] = useState<Article>();
   const [loading, setLoading] = useState(true);
-  const [summary, setSummary] = useState("now loading");
+
+  // [変更点 1] Stateを修正
+  const [summary, setSummary] = useState("");
+  const [isSummaryLoading, setIsSummaryLoading] = useState(true);
 
   const [partnerAge, setPartnerAge] = useState("20代");
   const [partnerRelationship, setPartnerRelationship] = useState("友人");
@@ -34,9 +37,20 @@ const DetailPage = ({ params }: DetailPageProps) => {
         if (foundArticle) {
           setArticle(foundArticle);
 
-          const summaryResult = await fetchGeminiSummary(foundArticle.content);
-          if (summaryResult) {
-            setSummary(summaryResult.summary ?? "要約できませんでした");
+          // [変更点 2] 要約取得処理を修正
+          setIsSummaryLoading(true);
+          try {
+            const summaryResult = await fetchGeminiSummary(
+              foundArticle.content
+            );
+            setSummary(
+              summaryResult?.summary ?? "要約を生成できませんでした。"
+            );
+          } catch (summaryError) {
+            console.error("Failed to fetch summary:", summaryError);
+            setSummary("要約の取得中にエラーが発生しました。");
+          } finally {
+            setIsSummaryLoading(false);
           }
         }
       } catch (error) {
@@ -84,11 +98,21 @@ const DetailPage = ({ params }: DetailPageProps) => {
         </Link>
       </div>
 
+      {/* [変更点 3] UIを条件分岐で切り替え */}
       <div className="mb-10 p-6 bg-gray-50 rounded-lg shadow">
         <h2 className="text-2xl font-semibold text-gray-800 mb-3">
           この記事の要約
         </h2>
-        <p className="text-gray-700 leading-relaxed">{summary}</p>
+        {isSummaryLoading ? (
+          <div className="space-y-3 animate-pulse">
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-10/12"></div>
+            <div className="h-4 bg-gray-300 rounded w-8/12"></div>
+          </div>
+        ) : (
+          <p className="text-gray-700 leading-relaxed">{summary}</p>
+        )}
       </div>
 
       <div className="mb-10 p-6 bg-white rounded-lg border border-gray-200">
