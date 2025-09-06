@@ -1,76 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // useEffectを追加
 import Link from "next/link";
+import dynamic from "next/dynamic"; // dynamic importを使用
 
-// デモ用の仮データ
-const attributes = ["友人", "初対面", "家族", "同僚", "上司"];
-const topics = ["旅行", "映画", "グルメ", "テクノロジー", "スポーツ"];
+// react-selectをクライアント側でのみ読み込む（SSR時のエラー防止）
+const Select = dynamic(() => import("react-select"), { ssr: false });
+
+// react-selectで使う選択肢の型定義
+interface HobbyOption {
+  value: string;
+  label: string;
+}
 
 export default function CreateDeckPage() {
-  const [selectedAttribute, setSelectedAttribute] = useState("");
-  const [selectedTopic, setSelectedTopic] = useState("");
+  // 選択されたトピックの型をHobbyOption | nullに変更
+  const [selectedTopic, setSelectedTopic] = useState<HobbyOption | null>(null);
+  // hobbies.jsonから読み込んだデータを格納するState
+  const [topicOptions, setTopicOptions] = useState<HobbyOption[]>([]);
 
-  // どちらか一方でも選択されていればtrueになる
-  const isButtonEnabled = selectedAttribute !== "" || selectedTopic !== "";
+  // ページが読み込まれた時に一度だけhobbies.jsonをフェッチする
+  useEffect(() => {
+    const fetchHobbies = async () => {
+      try {
+        const response = await fetch("/hobbies.json"); // publicフォルダのjsonを読み込む
+        const data: string[] = await response.json();
+        // react-selectで使える { value, label } の形式に変換
+        const options = data.map((hobby) => ({
+          value: hobby,
+          label: hobby,
+        }));
+        setTopicOptions(options);
+      } catch (error) {
+        console.error("趣味データの読み込みに失敗しました:", error);
+      }
+    };
+
+    fetchHobbies();
+  }, []); // 空の依存配列で初回レンダリング時のみ実行
+
+  // ボタンが有効かどうかの判定を更新
+  const isButtonEnabled = selectedTopic !== null;
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
+    <div className="flex h-screen items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-blue-800 mb-6">
-          会話デッキを作成
+          話題を抽出
         </h2>
-
-        {/* 相手の属性セクション */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            相手の属性
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {attributes.map((attribute) => (
-              <button
-                key={attribute}
-                type="button"
-                onClick={() => setSelectedAttribute(attribute)}
-                className={`
-                  px-4 py-2 rounded-full text-sm font-medium transition-colors
-                  ${
-                    selectedAttribute === attribute
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }
-                `}
-              >
-                {attribute}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* トピックセクション */}
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             トピック
           </label>
-          <div className="flex flex-wrap gap-2">
-            {topics.map((topic) => (
-              <button
-                key={topic}
-                type="button"
-                onClick={() => setSelectedTopic(topic)}
-                className={`
-                  px-4 py-2 rounded-full text-sm font-medium transition-colors
-                  ${
-                    selectedTopic === topic
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }
-                `}
-              >
-                {topic}
-              </button>
-            ))}
-          </div>
+          {/* ボタンの代わりにSelectコンポーネントを配置 */}
+          <Select
+            options={topicOptions}
+            value={selectedTopic}
+            onChange={(selected) =>
+              setSelectedTopic(selected as HobbyOption | null)
+            }
+            placeholder="トピックを検索または選択..."
+            isClearable
+            instanceId="topic-select" // Hydrationエラーを防ぐためのユニークID
+          />
         </div>
 
         {/* 作成ボタン */}
@@ -78,8 +72,8 @@ export default function CreateDeckPage() {
           href={{
             pathname: "/list",
             query: {
-              attribute: selectedAttribute,
-              topic: selectedTopic,
+              // 選択されたオブジェクトから値を取り出す
+              topic: selectedTopic?.value || "",
             },
           }}
           passHref
@@ -95,7 +89,7 @@ export default function CreateDeckPage() {
             `}
             disabled={!isButtonEnabled}
           >
-            会話デッキを作成
+            記事を出力
           </button>
         </Link>
       </div>
