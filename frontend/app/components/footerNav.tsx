@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const FooterNav = () => {
   const navItems = [
-    { name: "home", icon: IoHomeOutline, href: "/" },
+    { name: "home", icon: IoHomeOutline, href: "/top" },
     { name: "create", icon: FiPlusSquare, href: "/create" },
     { name: "profile", icon: FaRegUser, href: "/profile" },
   ];
