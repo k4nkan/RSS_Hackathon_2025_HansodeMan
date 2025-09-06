@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+// [変更点] Modalのインポートを削除
 
 const initialUser = {
   name: "山田 太郎",
@@ -33,13 +34,20 @@ const ProfileEditPage = () => {
   const router = useRouter();
   const [name, setName] = useState(initialUser.name);
   const [mbti, setMbti] = useState(initialUser.mbti);
+  // [変更点] モーダル用のuseStateを削除
 
+  // [変更点] handleSaveの処理をalert()とページ遷移に戻す
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Saving data:", { name, mbti });
     alert("プロフィールを更新しました！");
     router.push("/profile");
   };
+
+  // [変更点] handleCloseModal関数を削除
+
+  // ボタンが有効かどうかの判定ロジックはそのまま
+  const isButtonEnabled = name.trim() !== "";
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -113,7 +121,14 @@ const ProfileEditPage = () => {
         <div className="flex flex-col space-y-3">
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 rounded-lg text-white font-semibold hover:bg-blue-700 transition-colors"
+            className={`w-full py-2 px-4 rounded-lg text-white font-semibold transition-colors
+              ${
+                isButtonEnabled
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }
+            `}
+            disabled={!isButtonEnabled}
           >
             保存する
           </button>
@@ -125,6 +140,8 @@ const ProfileEditPage = () => {
           </Link>
         </div>
       </form>
+
+      {/* [変更点] Modalコンポーネントの呼び出しを削除 */}
     </div>
   );
 };
