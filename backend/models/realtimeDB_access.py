@@ -139,3 +139,18 @@ class DBAccess:
         except Exception as e:
             logger.error(f"MainHobby取得中にエラー: user_id={user_id}, error={str(e)}")
             return None
+        
+    @staticmethod
+    def write_hobby(data):
+        username = data.get('user')
+        mainhobby = data.get('mainhobby')
+        subhobby = data.get('subhobby')
+        h_data = {
+            "mainhobby": mainhobby,
+            "subhobby": subhobby
+        }
+
+        # 書き込み先の参照
+        ref = db.reference(f'users/{username}')
+        ref.set(h_data)
+        return username
