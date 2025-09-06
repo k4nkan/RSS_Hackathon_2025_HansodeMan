@@ -65,7 +65,7 @@ const DetailPage = ({ params }: DetailPageProps) => {
   }
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto p-8 mb-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">{article.title}</h1>
 
       <div className="flex items-center gap-6 mb-8">
@@ -151,15 +151,6 @@ const DetailPage = ({ params }: DetailPageProps) => {
         >
           この内容で質問を作成する
         </button>
-      </div>
-
-      <hr className="my-10" />
-
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-3">記事全文</h2>
-        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-          {article.content}
-        </p>
       </div>
     </div>
   );
