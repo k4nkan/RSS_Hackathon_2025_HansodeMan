@@ -18,11 +18,7 @@ const HomePage = () => {
       <h1 className="text-2xl font-bold mb-6 mt-10">あなたへのおすすめ</h1>
       {searchResults.length > 0 ? (
         searchResults.map((result, index) => (
-          <Link
-            key={index}
-            href={`/detail/${result.id}`}
-            passHref
-          >
+          <Link key={index} href={`/detail/${result.id}`} passHref>
             <ResultCard
               title={result.title}
               url={result.url}
