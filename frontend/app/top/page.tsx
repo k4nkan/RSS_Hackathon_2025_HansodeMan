@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ResultCard from "../components/ResultCard";
 import Link from "next/link";
 import { fetchDummyData } from "../components/fetchDummyData";
+import { fetchHomeData } from "../components/fetchHomeData";
 
 type SearchResult = {
   id: string;
@@ -21,6 +22,8 @@ const HomePage = () => {
     const load = async () => {
       try {
         const res = await fetchDummyData();
+        const profile = await fetchHomeData();
+        console.log(profile);
         setSearchResults(res.results);
       } catch (err) {
         console.error("❌ fetchDummyData error:", err);
