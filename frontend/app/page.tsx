@@ -1,54 +1,38 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import ResultCard from "./components/ResultCard";
 import Link from "next/link";
-import { fetchDummyData } from "./components/fetchDummyData";
+import Image from "next/image"; // Imageコンポーネントをインポート
 
-type SearchResult = {
-  id: string;
-  url: string;
-  title: string;
-  content: string;
-  score: number;
-  raw_content: string | null;
-};
+export default function WelcomePage() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50">
+      <div className="text-center">
+        {/* ロゴ部分をImageコンポーネントに差し替え */}
+        <div className="mb-12">
+          <Image
+            src="/logo.png"
+            alt="app-logo"
+            width={64}
+            height={64}
+            className="mx-auto" // 中央寄せのため
+          />
+          <h2 className="font-bold text-2xl text-blue-800">News2talk</h2>
+        </div>
 
-const HomePage = () => {
-  const [loading, setLoading] = useState(true);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetchDummyData();
-        setSearchResults(res.results);
-      } catch (err) {
-        console.error("❌ fetchDummyData error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
-
-  return loading ? (
-    <div className="flex w-full h-[100vh] justify-center items-center">
-      <div className="text-2xl font-bold">Now Loading...</div>
-    </div>
-  ) : (
-    <div className="container mx-auto p-4 mb-10">
-      <h2 className="text-xl font-semibold mb-4 mt-10">あなたへのおすすめ</h2>
-      {searchResults.length > 0 ? (
-        searchResults.map((result) => (
-          <Link key={result.id} href={`/detail/${result.id}`} passHref>
-            <ResultCard title={result.title} />
+        {/* サインアップ・ログインボタン */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/signup"
+            className="w-full sm:w-auto transform transition-transform duration-300 hover:scale-105 bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-blue-700"
+          >
+            サインアップ
           </Link>
-        ))
-      ) : (
-        <p>該当する検索結果はありませんでした。</p>
-      )}
-    </div>
+          <Link
+            href="/login"
+            className="w-full sm:w-auto transform transition-transform duration-300 hover:scale-105 bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-lg border border-blue-600 hover:bg-gray-100"
+          >
+            ログイン
+          </Link>
+        </div>
+      </div>
+    </main>
   );
-};
-
-export default HomePage;
+}

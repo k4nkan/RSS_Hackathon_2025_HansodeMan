@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link"; // [変更点] Linkコンポーネントをインポート
 import HobbyTagSelector from "./HobbyTagSelector";
 
 // 趣味のデータを直接インポート
@@ -10,7 +11,7 @@ const options = hobbiesData.map((hobby: string) => ({
   label: hobby,
 }));
 
-// 人気の趣味リストを50個に増量
+// 人気の趣味リスト
 const popularHobbies = [
   // 定番
   "読書",
@@ -79,6 +80,16 @@ export default function HobbySelectPage() {
         <p className="text-gray-500">好きなことを話題にしよう。</p>
       </div>
       <HobbyTagSelector options={options} popularHobbies={popularHobbies} />
+
+      {/* [変更点] /top に移動するボタンを追加 */}
+      <div className="mt-8 mb-12">
+        <Link
+          href="/top"
+          className="block w-full text-center bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+        >
+          登録
+        </Link>
+      </div>
     </div>
   );
 }
