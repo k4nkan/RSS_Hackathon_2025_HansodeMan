@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 // デモ用の仮データ
-const attributes = ["友人", "初対面", "家族", "同僚"];
+const attributes = ["友人", "初対面", "家族", "同僚", "上司"];
 const topics = ["旅行", "映画", "グルメ", "テクノロジー", "スポーツ"];
 
 export default function CreateDeckPage() {
@@ -76,7 +76,7 @@ export default function CreateDeckPage() {
         {/* 作成ボタン */}
         <Link
           href={{
-            pathname: "/decks",
+            pathname: "/list",
             query: {
               attribute: selectedAttribute,
               topic: selectedTopic,
