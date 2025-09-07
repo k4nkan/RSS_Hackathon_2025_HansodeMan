@@ -1,7 +1,10 @@
 from flask import request, jsonify
+"""
+from models.make_question import GeminiClient
+from models.make_summary import GeminiClient
+"""
 
-def handle_detail():
-    data = request.get_json()
+def handle_detail(data):
     content = data.get('content')
 
     if not content:
