@@ -41,9 +41,8 @@ class DBAccess:
         password = data.get('pass')
         user_id = username
         ref = db.reference(f'users/{user_id}')
-        new_user_ref = ref.push({'PASS': password})
-        logger.info(f"データが新しいIDで書き込まれました: {new_user_ref.key}")
-        return new_user_ref.key
+        ref.set({'PASS': password})
+        return user_id
 
     @staticmethod
     def authenticate_user(user_id, password):
