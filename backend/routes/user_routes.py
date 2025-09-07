@@ -22,7 +22,7 @@ def hobby():
 def login_route():
     return login()
 
-@user_bp.route("/home", methods=["GET"])
+@user_bp.route("/home", methods=["POST"])
 def home_route():
     data = request.json
     username = data.get('user_id')
